@@ -5,7 +5,7 @@
 
 namespace libx 
 {
-enum class MemError { None, BaseNotFound, BadRead };
+enum MemError { None, BaseNotFound, BadRead };
 
 MemError getPointer(const char* moduleName, uintptr_t baseOffset, 
                     const uintptr_t* offsets, size_t offsetCount, 
