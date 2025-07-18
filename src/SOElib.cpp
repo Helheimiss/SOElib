@@ -1,10 +1,10 @@
 #include <windows.h>
 #include <cstdint>
-#include "libX.hpp"
+#include "SOElib.hpp"
 
-namespace libx
+namespace SOElib
 {
-MemError getPointer(char handleA[], uintptr_t ptrOffset, uintptr_t offsets[], size_t offsetCount, size_t varSize, void** outPtr)
+MemError getPointer(char handleA[], uintptr_t ptrOffset, uintptr_t offsets[], size_t offsetCount, void** outPtr, size_t varSize)
 {
     const uintptr_t basePtr = reinterpret_cast<uintptr_t>(GetModuleHandleA(handleA));
     if (!basePtr) return BaseNotFound;
