@@ -4,7 +4,7 @@
 #include "SOElib.hpp"
 
 
-void foo(float* x, float* y, float* z)
+void mainFunc(float* x, float* y, float* z)
 {
     
     while (true)
@@ -56,9 +56,11 @@ DWORD WINAPI MainThread(LPVOID hModule)
         errorY == SOElib::MemError::None &&
         errorZ == SOElib::MemError::None
     )
-        foo(x, y, z);
+        mainFunc(x, y, z);
     else
         std::cout << "Error" << '\n';
+
+    system("pause");
 
     fclose(stdout);
     FreeConsole();
