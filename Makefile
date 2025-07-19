@@ -1,7 +1,7 @@
 CC = g++
 ARCH = 32
-SRC = ./src/libX.cpp
-TARGET = libX$(ARCH)
+SRC = ./src/SOElib.cpp
+TARGET = SOElibX$(ARCH)
 CFLAGS = -Wall -m$(ARCH)
 
 

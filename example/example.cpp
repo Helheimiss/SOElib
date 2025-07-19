@@ -1,19 +1,23 @@
 #include <iostream>
 #include <Windows.h>
 
-#include "../src/libX.hpp"
+#include "SOElib.hpp"
 
 
-void foo(float* value)
+void foo(float* x, float* y, float* z)
 {
-    if (!value) return;
     
     while (true)
-    {
-        std::cout << *value << '\n';
-        
-        if (GetAsyncKeyState(VK_NUMPAD8) & 1) *value += 1.0f;
-        if (GetAsyncKeyState(VK_NUMPAD2) & 1) *value -= 1.0f;
+    {        
+        if (GetAsyncKeyState(VK_NUMPAD8) & 1) *x += 1.0f;
+        if (GetAsyncKeyState(VK_NUMPAD9) & 1) *x -= 1.0f;
+
+        if (GetAsyncKeyState(VK_NUMPAD5) & 1) *y += 1.0f;
+        if (GetAsyncKeyState(VK_NUMPAD6) & 1) *y -= 1.0f;
+
+        if (GetAsyncKeyState(VK_NUMPAD2) & 1) *z += 1.0f;
+        if (GetAsyncKeyState(VK_NUMPAD3) & 1) *z -= 1.0f;
+
         if (GetAsyncKeyState(VK_NUMPAD0) & 1) break;
 
         Sleep(10);
@@ -26,17 +30,35 @@ DWORD WINAPI MainThread(LPVOID hModule)
     FILE* fl;
     freopen_s(&fl, "CONOUT$", "w", stdout);
     
-    float* value = nullptr;
-    uintptr_t offsets[] = {0x284};
+    float* x = nullptr;
+    float* y = nullptr;
+    float* z = nullptr;
+
+    uintptr_t offsetsX[] = {0x280};
+    uintptr_t offsetsY[] = {0x284};
+    uintptr_t offsetsZ[] = {0x27C};
     
-    auto error = libx::getPointer("gta_sa.exe", 0x007743D0, 
-                                offsets, std::size(offsets), 
-                                reinterpret_cast<void**>(&value));
+    auto errorX = SOElib::getPointer("gta_sa.exe", 0x007743D0, 
+                                offsetsX, std::size(offsetsX), 
+                                reinterpret_cast<void**>(&x), sizeof(float));
+
+    auto errorY = SOElib::getPointer("gta_sa.exe", 0x007743D0, 
+                                offsetsY, std::size(offsetsY), 
+                                reinterpret_cast<void**>(&y), sizeof(float));                               
     
-    if (error == libx::MemError::None)
-        foo(value);
+    auto errorZ = SOElib::getPointer("gta_sa.exe", 0x007743D0, 
+                                offsetsZ, std::size(offsetsZ), 
+                                reinterpret_cast<void**>(&z), sizeof(float));
+
+    if 
+    (
+        errorX == SOElib::MemError::None &&
+        errorY == SOElib::MemError::None &&
+        errorZ == SOElib::MemError::None
+    )
+        foo(x, y, z);
     else
-        std::cout << "Error: " << static_cast<int>(error) << '\n';
+        std::cout << "Error" << '\n';
 
     fclose(stdout);
     FreeConsole();
